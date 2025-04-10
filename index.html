@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0,123,255,0.3);
+        }
+
+        .error {
+            color: red;
+            font-size: 0.8em;
+            display: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Registration Form</h2>
+        <form id="registrationForm" onsubmit="return validateForm(event)">
+            <div class="form-group">
+                <label for="fullName">Full Name *</label>
+                <input type="text" id="fullName" name="fullName" required 
+                       pattern="[A-Za-z\s]{2,}" 
+                       title="Name should only contain letters and spaces">
+                <span class="error" id="nameError">Please enter a valid name</span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required>
+                <span class="error" id="emailError">Please enter a valid email</span>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" 
+                       pattern="[0-9]{10}" 
+                       title="Please enter a 10-digit phone number">
+                <span class="error" id="phoneError">Please enter a valid 10-digit phone number</span>
+            </div>
+
+            <div class="form-group">
+                <label for="birthdate">Date of Birth</label>
+                <input type="date" id="birthdate" name="birthdate" 
+                       max="2010-12-31">
+                <span class="error" id="dateError">Please select a valid date</span>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Number of Tickets (1-10)</label>
+                <input type="number" id="quantity" name="quantity" 
+                       min="1" max="10" value="1">
+                <span class="error" id="quantityError">Please enter a number between 1 and 10</span>
+            </div>
+
+            <div class="form-group">
+                <label for="color">Favorite Color</label>
+                <input type="color" id="color" name="color" value="#007bff">
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender">
+                    <option value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                <span class="error" id="genderError">Please select a gender</span>
+            </div>
+
+            <div class="form-group">
+                <label for="comments">Comments</label>
+                <textarea id="comments" name="comments" rows="4" 
+                          maxlength="200" 
+                          placeholder="Enter your comments (max 200 characters)"></textarea>
+            </div>
+
+            <button type="submit">Submit Registration</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm(event) {
+            event.preventDefault();
+            let isValid = true;
+
+            // Reset error messages
+            document.querySelectorAll('.error').forEach(error => {
+                error.style.display = 'none';
+            });
+
+            // Name validation
+            const name = document.getElementById('fullName');
+            if (!name.value.match(/[A-Za-z\s]{2,}/)) {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Email validation
+            const email = document.getElementById('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Phone validation
+            const phone = document.getElementById('phone');
+            if (phone.value && !phone.value.match(/[0-9]{10}/)) {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            }
+
+            const dob = document.getElementById('birthdate');
+            if(!dob.value){
+                document.getElementById('dateError').style.display = 'block'
+                isValid = false;
+            }
+
+            const gender = document.getElementById('gender');
+            if(!gender.value){
+                document.getElementById('genderError').style.display = 'block'
+                isValid = false;
+            }
+
+            // Quantity validation
+            const quantity = document.getElementById('quantity');
+            if (quantity.value < 1 || quantity.value > 10) {
+                document.getElementById('quantityError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert('Form submitted successfully!\n' + 
+                      'Name: ' + name.value + '\n' + 
+                      'Email: ' + email.value + '\n' + 
+                      'Phone: ' + (phone.value || 'Not provided'));
+                document.getElementById('registrationForm').reset();
+            }
+
+            return isValid;
+        }
+    </script>
+</body>
+</html>
